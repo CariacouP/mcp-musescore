@@ -1,9 +1,9 @@
 import logging
-from typing import Dict, Any, Optional
+from typing import Dict, Any, Optional, Union
 
 logger = logging.getLogger("ResponseFormatter")
 
-async def run_and_format_response(client, action: str, params: Optional[Dict[str, Any]] = None):
+async def run_and_format_response(client: Any, action: str, params: Optional[Dict[str, Any]] = None) -> Any:
     """
     Executes a command and formats the response to save LLM tokens.
     Converts raw JSON selections and scores into concise LilyPond strings.

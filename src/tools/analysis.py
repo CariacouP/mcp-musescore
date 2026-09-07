@@ -3,8 +3,9 @@
 from typing import List, Dict, Any, Optional
 from ..client import MuseScoreClient
 from ..utils.response_formatter import run_and_format_response
+from ..utils.lilypond_writer import parse_lilypond_pitch
 
-def setup_analysis_tools(mcp, client: MuseScoreClient):
+def setup_analysis_tools(mcp: Any, client: MuseScoreClient) -> None:
     """Setup analysis tools."""
 
     def sgn(x: int) -> int:
@@ -494,43 +495,6 @@ def setup_analysis_tools(mcp, client: MuseScoreClient):
         score_data = response["result"]["analysis"]
         return _analyze_harmony_data(score_data, start_measure, end_measure, key)
 
-    def _lilypond_to_midi_pitch(lily_pitch: str) -> tuple[int, int]:
-        """Convert LilyPond pitch (e.g. c'', fis') to (midi_pitch, tpc)"""
-        import re
-        match = re.match(r"^([a-g](?:is|es|isis|eses)?)([,']*)$", lily_pitch.strip())
-        if not match:
-            return 60, 14 # fallback C4
-            
-        base_str = match.group(1)
-        octave_str = match.group(2)
-        
-        tpc_map = {
-            'c': 14, 'cis': 21, 'des': 9, 'd': 16, 'dis': 23, 'es': 11,
-            'e': 18, 'eis': 25, 'fes': 6, 'f': 13, 'fis': 20, 'ges': 8,
-            'g': 15, 'gis': 22, 'as': 10, 'a': 17, 'ais': 24, 'bes': 12,
-            'b': 19, 'ces': 7, 'bis': 26
-        }
-        
-        pitch_map = {
-            'c': 0, 'cis': 1, 'des': 1, 'd': 2, 'dis': 3, 'es': 3,
-            'e': 4, 'eis': 5, 'fes': 4, 'f': 5, 'fis': 6, 'ges': 6,
-            'g': 7, 'gis': 8, 'as': 8, 'a': 9, 'ais': 10, 'bes': 10,
-            'b': 11, 'ces': 11, 'bis': 0
-        }
-        
-        tpc = tpc_map.get(base_str, 14)
-        pc = pitch_map.get(base_str, 0)
-        
-        octave = 4
-        if octave_str == "'": octave = 5
-        elif octave_str == "''": octave = 6
-        elif octave_str == "'''": octave = 7
-        elif octave_str == ",": octave = 3
-        elif octave_str == ",,": octave = 2
-        
-        midi = (octave) * 12 + pc
-        return midi, tpc
-
     @mcp.tool()
     async def simulate_harmony_changes(changes_json: str, start_measure: Optional[int] = None, end_measure: Optional[int] = None, key: Optional[str] = None) -> str:
         """Simulate harmony modifications in memory without modifying the actual MuseScore file.
@@ -572,7 +536,10 @@ def setup_analysis_tools(mcp, client: MuseScoreClient):
             voice_idx = target_t % 4
             staff_key = f"staff{staff_idx}"
             
-            new_midi, new_tpc = _lilypond_to_midi_pitch(new_pitch_lily)
+            try:
+                new_midi, new_tpc = parse_lilypond_pitch(new_pitch_lily)
+            except Exception:
+                new_midi, new_tpc = 60, 14
             
             # Find the measure
             for m_data in score_data.get("measures", []):

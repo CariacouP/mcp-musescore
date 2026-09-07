@@ -14,7 +14,10 @@ class addNoteParams(TypedDict, total=False):
     advanceCursorAfterAction: bool
     voice: int
     staffIdx: int
+    staff_idx: int
     measure: int
+    startTick: int
+    addToChord: bool
 
 
 class addNoteAction(TypedDict):
@@ -22,9 +25,14 @@ class addNoteAction(TypedDict):
     params: addNoteParams
 
 
-class addRestParams(TypedDict):
+class addRestParams(TypedDict, total=False):
     duration: Dict[Literal["numerator", "denominator"], int]
     advanceCursorAfterAction: bool
+    voice: int
+    staffIdx: int
+    staff_idx: int
+    measure: int
+    startTick: int
 
 
 class addRestAction(TypedDict):

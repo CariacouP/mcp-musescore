@@ -1,14 +1,15 @@
 """Time signature and tempo tools for MuseScore MCP."""
 
+from typing import Any
 from ..client import MuseScoreClient
 from ..utils.response_formatter import run_and_format_response
 
 
-def setup_time_tempo_tools(mcp, client: MuseScoreClient):
+def setup_time_tempo_tools(mcp: Any, client: MuseScoreClient) -> None:
     """Setup time signature and tempo tools."""
     
     @mcp.tool()
-    async def set_time_signature(numerator: int = 4, denominator: int = 4):
+    async def set_time_signature(numerator: int = 4, denominator: int = 4) -> Any:
         """Set the time signature.
         
         Args:
@@ -21,7 +22,7 @@ def setup_time_tempo_tools(mcp, client: MuseScoreClient):
         })
 
     @mcp.tool()
-    async def set_tempo(bpm: float = 120.0):
+    async def set_tempo(bpm: float = 120.0) -> Any:
         """Set the tempo.
 
         Args:

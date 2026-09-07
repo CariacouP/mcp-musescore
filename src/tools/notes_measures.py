@@ -1,11 +1,11 @@
 """Notes and measures tools for MuseScore MCP."""
 
-from typing import List, Optional
+from typing import List, Optional, Any, Dict
 from ..client import MuseScoreClient
 from ..utils.response_formatter import run_and_format_response
 
 
-def setup_notes_measures_tools(mcp, client: MuseScoreClient):
+def setup_notes_measures_tools(mcp: Any, client: MuseScoreClient) -> None:
     """Setup notes and measures tools."""
     
     @mcp.tool()
@@ -16,7 +16,7 @@ def setup_notes_measures_tools(mcp, client: MuseScoreClient):
         voice: Optional[int] = None,
         staff_idx: Optional[int] = None,
         measure: Optional[int] = None
-    ):
+    ) -> Any:
         """Add a note at the current cursor position or specified staff/voice/measure with specified pitch and duration.
         
         Args:
@@ -43,7 +43,7 @@ def setup_notes_measures_tools(mcp, client: MuseScoreClient):
         return await run_and_format_response(client, "addNote", payload)
 
     @mcp.tool()
-    async def add_rest(duration: dict = {"numerator": 1, "denominator": 4}, advance_cursor_after_action: bool = True):
+    async def add_rest(duration: dict = {"numerator": 1, "denominator": 4}, advance_cursor_after_action: bool = True) -> Any:
         """Add a rest at the current cursor position.
         
         Args:
@@ -56,7 +56,7 @@ def setup_notes_measures_tools(mcp, client: MuseScoreClient):
         })
 
     @mcp.tool()
-    async def add_tuplet(duration: dict = {"numerator": 1, "denominator": 4}, ratio: dict = {"numerator": 3, "denominator": 2}, advance_cursor_after_action: bool = True):
+    async def add_tuplet(duration: dict = {"numerator": 1, "denominator": 4}, ratio: dict = {"numerator": 3, "denominator": 2}, advance_cursor_after_action: bool = True) -> Any:
         """Add a tuplet at the current cursor position.
         
         Args:
@@ -71,7 +71,7 @@ def setup_notes_measures_tools(mcp, client: MuseScoreClient):
         })
 
     @mcp.tool()
-    async def add_lyrics(lyrics: List[str], verse: int = 0):
+    async def add_lyrics(lyrics: List[str], verse: int = 0) -> Any:
         """Add lyrics to consecutive notes starting from the current cursor position.
         
         Args:
@@ -84,17 +84,17 @@ def setup_notes_measures_tools(mcp, client: MuseScoreClient):
         })
 
     @mcp.tool()
-    async def insert_measure():
+    async def insert_measure() -> Any:
         """Insert a measure at the current position."""
         return await run_and_format_response(client, "insertMeasure")
 
     @mcp.tool()
-    async def append_measure(count: int = 1):
+    async def append_measure(count: int = 1) -> Any:
         """Append measures to the end of the score."""
         return await run_and_format_response(client, "appendMeasure", {"count": count})
 
     @mcp.tool()
-    async def delete_selection(measure: Optional[int] = None):
+    async def delete_selection(measure: Optional[int] = None) -> Any:
         """Delete the current selection or specified measure."""
         params = {}
         if measure is not None:
@@ -102,7 +102,7 @@ def setup_notes_measures_tools(mcp, client: MuseScoreClient):
         return await run_and_format_response(client, "deleteSelection", params)
 
     @mcp.tool()
-    async def clear_annotations(prefix: str = "@"):
+    async def clear_annotations(prefix: str = "@") -> Any:
         """Clear all StaffText and SystemText annotations that start with the specified prefix.
         
         Args:
@@ -158,6 +158,6 @@ def setup_notes_measures_tools(mcp, client: MuseScoreClient):
             return f"Error processing LilyPond code: {e}"
 
     @mcp.tool()
-    async def undo():
+    async def undo() -> Any:
         """Undo the last action."""
         return await run_and_format_response(client, "undo")

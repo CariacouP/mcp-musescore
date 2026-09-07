@@ -15,7 +15,7 @@ class MuseScoreClient:
         self.uri = f"ws://{host}:{port}"
         self.websocket = None
     
-    async def connect(self):
+    async def connect(self) -> bool:
         """Connect to the MuseScore WebSocket API."""
         try:
             self.websocket = await websockets.connect(self.uri)
@@ -47,7 +47,7 @@ class MuseScoreClient:
             logger.error(f"Error sending command: {str(e)}")
             return {"error": str(e)}
     
-    async def close(self):
+    async def close(self) -> None:
         """Close the WebSocket connection."""
         if self.websocket:
             await self.websocket.close()

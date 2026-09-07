@@ -1,14 +1,15 @@
 """Staff and instrument tools for MuseScore MCP."""
 
+from typing import Any
 from ..client import MuseScoreClient
 from ..utils.response_formatter import run_and_format_response
 
 
-def setup_staff_instruments_tools(mcp, client: MuseScoreClient):
+def setup_staff_instruments_tools(mcp: Any, client: MuseScoreClient) -> None:
     """Setup staff and instrument tools."""
     
     @mcp.tool()
-    async def add_instrument(instrument_id: str):
+    async def add_instrument(instrument_id: str) -> Any:
         """Add a new staff/instrument to the score.
         
         Args:
@@ -19,7 +20,7 @@ def setup_staff_instruments_tools(mcp, client: MuseScoreClient):
         })
 
     @mcp.tool()
-    async def set_staff_mute(staff: int, mute: bool):
+    async def set_staff_mute(staff: int, mute: bool) -> Any:
         """Mute or unmute a staff.
         
         Args:
@@ -32,7 +33,7 @@ def setup_staff_instruments_tools(mcp, client: MuseScoreClient):
         })
 
     @mcp.tool()
-    async def set_instrument_sound(staff: int, instrument_id: str):
+    async def set_instrument_sound(staff: int, instrument_id: str) -> Any:
         """Change the sound of an instrument on a staff.
         
         Args:

@@ -73,10 +73,16 @@ Add to your Claude Desktop configuration file:
    - You should see console output: `"Starting MuseScore API Server on port 8765"`
 3. **Then start the Python MCP server** or restart Claude Desktop
 
-[insert screenshot of different functionality, harmonisation, melodywriting, as zoomed in GIFs]
-
 ### Development and Testing
 
+#### Running Automated Tests
+Run the offline unit test suite covering LilyPond translation and polyphony:
+
+```bash
+python -m unittest discover -s tests -p "test_*.py"
+```
+
+#### MCP Development Tools
 For development, use the MCP development tools:
 
 ```bash
@@ -232,12 +238,27 @@ await processSequence(sequence)
 ## File Structure
 
 ```
-mcp-musescore-polyphony/
-├── .venv/
+mcp-musescore/
 ├── server.py                           # Python MCP server entry point
 ├── musescore-mcp-websocket.qml         # MuseScore plugin
 ├── requirements.txt
 ├── README.md
+├── sprint_backlog.md                   # Agile sprint tracker
+├── skills/                             # Custom agent skills
+│   └── relecture_partition/
+│       └── SKILL.md
+├── scripts/                            # Utility and integration scripts
+│   ├── dump_score.py
+│   ├── syntax_check.js
+│   └── integration/                    # Manual WebSocket integration tests
+│       ├── test_harmony.py
+│       ├── test_ws.py
+│       └── test_ws_raw.py
+├── tests/                              # Automated unit tests
+│   ├── fixtures/
+│   │   └── score_dump.json
+│   ├── test_lilypond_converter.py
+│   └── test_lilypond_writer.py
 └── src/                                # Source code modules
     ├── __init__.py
     ├── client/                         # WebSocket client functionality
@@ -252,9 +273,13 @@ mcp-musescore-polyphony/
     │   ├── sequences.py                # Batch operation tools
     │   ├── staff_instruments.py        # Staff and instrument tools
     │   └── time_tempo.py               # Timing and tempo tools
-    └── types/                          # Type definitions
-        ├── __init__.py
-        └── action_types.py             # WebSocket action type definitions
+    ├── types/                          # Type definitions
+    │   ├── __init__.py
+    │   └── action_types.py             # WebSocket action type definitions
+    └── utils/                          # LilyPond parsing and formatting
+        ├── lilypond_converter.py       # Score JSON to LilyPond converter
+        ├── lilypond_writer.py          # LilyPond syntax to MuseScore action compiler
+        └── response_formatter.py       # LLM token-saving response formatter
 ```
 
 ## MIDI Pitch Reference
