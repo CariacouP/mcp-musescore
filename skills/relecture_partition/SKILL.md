@@ -26,4 +26,4 @@ Ce skill est conçu pour vous guider lors de l'analyse harmonique d'une partitio
 - **Soyez constructif** : Proposez une ou deux options de correction simples et expliquez brièvement leur effet musical.
 
 ## Documentation Avancée
-Si vous êtes face à un cas très complexe (modulations ambiguës, formes spécifiques), n'hésitez pas à consulter les références situées dans le dossier local du projet : `/Users/lucabankofski/Documents_local/mcp-musescore/knowledge/`.
+Si vous êtes face à un cas très complexe (modulations ambiguës, formes spécifiques), n'hésitez pas à consulter les références situées dans le dossier local du projet : `./knowledge/`. 
